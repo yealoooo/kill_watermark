@@ -14,16 +14,10 @@ public class HttpRequestHeaderUtil {
             "Mozilla/5.0 (Linux; U; Android 3.0; en-us; Xoom Build/HRI39) AppleWebKit/534.13 (KHTML, like Gecko) Version/4.0 Safari/534.13"
     };
 
-    private static String getAgent() {
+    public static String getAgent() {
         ThreadLocalRandom threadLocalRandom = ThreadLocalRandom.current();
         int index = threadLocalRandom.nextInt(0, AGENT_ARRAY.length - 1);
         return AGENT_ARRAY[index];
-    }
-
-    public static Map<String, String> getHeadMap() {
-        return new HashMap<String, String>(){{
-            put("user-agent", getAgent());
-        }};
     }
 
 }

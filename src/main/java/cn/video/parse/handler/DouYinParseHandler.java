@@ -1,5 +1,6 @@
 package cn.video.parse.handler;
 
+import cn.hutool.core.util.URLUtil;
 import cn.video.parse.Parse;
 import cn.video.util.HttpRequestHeaderUtil;
 import cn.video.util.HttpUtil;
@@ -8,6 +9,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class DouYinParseHandler implements Parse {
@@ -17,7 +19,7 @@ public class DouYinParseHandler implements Parse {
     @Override
     public ParseVO parseUrl(String url) throws IOException {
         // 获取 重定向地址
-        Map<String, String> headMap = HttpRequestHeaderUtil.getHeadMap();
+        Map<String, String> headMap = getHeaderMap();
         String locationUrl = HttpUtil.getLocationUrl(url, headMap);
 
 
@@ -32,17 +34,30 @@ public class DouYinParseHandler implements Parse {
 
         String videoUrl = videoObject.getJSONObject("play_addr").getJSONArray("url_list").getString(0).replace("playwm", "play");
 
-        // 获取视频的重定向地址
+        // 获取视频的重定向地址ss
 
         String locationVideoUrl = HttpUtil.getLocationUrl(videoUrl, headMap);
-        return new ParseVO(videoUrl, locationVideoUrl);
+        return ParseVO.video(videoUrl, "https://watermark.doobird.cn/polymeric/downLoadImage?url=" + URLUtil.encode(locationVideoUrl), true);
     }
 
 
-    public static String getItemId(String url) {
+    @Override
+    public String getItemId(String url) {
         int start = url.indexOf("/video/") + "/video/".length();
         int end = url.lastIndexOf("/");
 
         return url.substring(start, end);
+    }
+
+    @Override
+    public Map<String, String> getHeaderMap() {
+        return new HashMap<String, String>(){{
+            put("user-agent", HttpRequestHeaderUtil.getAgent());
+        }};
+    }
+
+    public static void main(String[] args) throws IOException {
+        DouYinParseHandler douYinParseHandler = new DouYinParseHandler();
+        douYinParseHandler.parseUrl("https://v.douyin.com/eEcPdeo/");
     }
 }

@@ -15,9 +15,13 @@ public class UrlUtil {
         return null;
     }
 
-    public static void main(String[] args) {
-        String data = "0.28 eBg:/ %dou来cba %杨鸣 %篮球 %裁判 杨鸣挑挑战广东24秒进攻违例，可恶，被他装到了！  https://v.douyin.com/eo5YNoB/ 复制此lian接，答鐦Dou音搜索，直接观kan视频！";
-
-        System.out.println(filterUrl(data));
+    public static String getDomain(String url) {
+        String regex = "(ht|f)tp(s?)\\:\\/\\/[0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(url);
+        if (m.find()) {
+            return url.substring(m.start(), m.end());
+        }
+        return null;
     }
 }
