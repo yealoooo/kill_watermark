@@ -1,6 +1,6 @@
 package cn.video.service;
 
-import cn.video.vo.ParseVO;
+import cn.video.controller.vo.ParseVO;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -13,5 +13,4 @@ public interface PolymericService {
 
     void downLoadImage(String url, HttpServletResponse response);
 
-    void fankui(String fk);
 }

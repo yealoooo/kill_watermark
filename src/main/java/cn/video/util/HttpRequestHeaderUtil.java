@@ -1,8 +1,5 @@
 package cn.video.util;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class HttpRequestHeaderUtil {

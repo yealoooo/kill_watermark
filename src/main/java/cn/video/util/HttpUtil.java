@@ -4,16 +4,16 @@ package cn.video.util;
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
-import com.alibaba.fastjson.JSON;
+import cn.video.entity.ProxyIpEntity;
+import cn.video.mapper.ProxyIpMapper;
 
-import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.Map;
-import java.util.Objects;
 
 public class HttpUtil {
 
     private static HttpResponse get(String url, Map<String, String> headerMap){
-
         HttpRequest httpRequest = HttpRequest.get(url);
 
         if (null != headerMap && !headerMap.isEmpty()) {
@@ -22,17 +22,24 @@ public class HttpUtil {
             }
         }
 
-        return httpRequest.execute();
+        if (null == headerMap || !headerMap.containsKey("user-agent")) {
+            // 随机user-agent
+            httpRequest.header("user-agent", HttpRequestHeaderUtil.getAgent());
+        }
+
+        ProxyIpMapper proxyIpMapper = ApplicationContextUtils.getBean(ProxyIpMapper.class);
+        ProxyIpEntity proxyIpEntity = proxyIpMapper.selectById(1);
+
+        Proxy proxy = new Proxy(Proxy.Type.HTTP,new InetSocketAddress(proxyIpEntity.getIp(), proxyIpEntity.getPort()));
+        return httpRequest.setProxy(proxy).execute();
     }
 
 
     public static String getBody(String url, Map<String, String> header) {
-//        System.out.println("getBody:\n" + url + "\n" + JSON.toJSONString(header));
         return get(url, header).body();
     }
 
     public static String getLocationUrl(String url, Map<String, String> header) {
-//        System.out.println("getLocationUrl:\n" + url + "\n" + JSON.toJSONString(header));
         HttpResponse httpResponse = get(url, header);
         return httpResponse.headers().get(Header.LOCATION.getValue()).get(0);
     }

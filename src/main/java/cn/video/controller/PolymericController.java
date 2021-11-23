@@ -1,11 +1,13 @@
 package cn.video.controller;
 
-import cn.hutool.http.HttpRequest;
+import cn.video.annotation.ApiEncryptAnnotation;
 import cn.video.base.Result;
+import cn.video.controller.vo.ParseVO;
+import cn.video.entity.ProposalEntity;
+import cn.video.mapper.ProposalMapper;
 import cn.video.service.PolymericService;
 import cn.video.util.UrlUtil;
 import com.alibaba.fastjson.JSON;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,18 +18,18 @@ import java.util.Map;
 @RequestMapping("/polymeric")
 public class PolymericController {
 
-    @Autowired
-    private PolymericService polymericService;
+    private final PolymericService polymericService;
+
+    private final ProposalMapper proposalMapper;
+
+    public PolymericController(PolymericService polymericService, ProposalMapper proposalMapper) {
+        this.polymericService = polymericService;
+        this.proposalMapper = proposalMapper;
+    }
 
     @GetMapping("/parseUrl")
-    public Result parseUrl(@RequestParam String url) throws IOException {
-
-//        if (url.contains("xhslink.com")) {
-//            HttpRequest httpRequest = HttpRequest.get("http://pc93fh.natappfree.cc/polymeric/parseUrl?url=" + url);
-//
-//            String body = httpRequest.execute().body();
-//            return Result.aes(JSON.parseObject(body).getString("data"));
-//        }
+    @ApiEncryptAnnotation
+    public Result<ParseVO> parseUrl(@RequestParam String url) throws IOException {
         return Result.success(this.polymericService.parseUrl(UrlUtil.filterUrl(url)));
     }
 
@@ -43,13 +45,17 @@ public class PolymericController {
     }
 
     @GetMapping("/fankui")
-    public Result fankui(@RequestParam String fk) {
-        this.polymericService.fankui(fk);
+    public Result<Void> fankui(@RequestParam String fk) {
+//        this.polymericService.fankui(fk);
+        ProposalEntity proposalEntity = new ProposalEntity();
+        proposalEntity.setProposalData(fk);
+
+        this.proposalMapper.insert(proposalEntity);
         return Result.success(null);
     }
 
     @GetMapping("/getTitleText")
-    public Result getTitleText() {
+    public Result<String> getTitleText() {
         String titleText = "将复制好的连接粘贴至下方点击解析即可!\n" +
                 "目前支持(抖音,皮皮虾,小红书,微博)\n" +
                 "注:(小红书暂且仅支持 图片解析)\n" +

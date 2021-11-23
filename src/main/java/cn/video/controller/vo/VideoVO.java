@@ -1,18 +1,18 @@
-package cn.video.vo;
+package cn.video.controller.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ImageVO {
-    private List<String> downLoadUrlList;
+public class VideoVO {
+    private String videoUrl;
 
-    private boolean isDownLoad;
+    private String downLoadUrl;
+
+    private boolean isDownload;
 }

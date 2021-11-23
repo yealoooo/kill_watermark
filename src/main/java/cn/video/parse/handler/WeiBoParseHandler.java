@@ -1,28 +1,30 @@
 package cn.video.parse.handler;
 
+import cn.video.controller.vo.ImageVO;
+import cn.video.controller.vo.ParseVO;
+import cn.video.controller.vo.VideoVO;
 import cn.video.exceptions.BasicException;
 import cn.video.parse.Parse;
-import cn.video.util.HttpRequestHeaderUtil;
 import cn.video.util.HttpUtil;
 import cn.video.util.UrlUtil;
-import cn.video.vo.ImageVO;
-import cn.video.vo.ParseVO;
-import cn.video.vo.VideoVO;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class WeiBoParseHandler implements Parse {
+@Component
+public class WeiBoParseHandler extends Parse {
 
-    private static final String REQUEST_URL = "https://m.weibo.cn";
     private List<String> WB_DOMAIN = new ArrayList<String>(){{
         add("wx4.sinaimg.cn");
         add("wx2.sinaimg.cn");
@@ -30,14 +32,11 @@ public class WeiBoParseHandler implements Parse {
     }};
 
     @Override
-    public ParseVO parseUrl(String url) throws IOException {
-
+    public ParseVO parseUrl(String url) {
         Map<String, String> headMap = new HashMap<>();
-        headMap.put("user-agent", HttpRequestHeaderUtil.getAgent());
-
         String locationUrl = HttpUtil.getLocationUrl(url, headMap);
 
-        String body = HttpUtil.getBody(REQUEST_URL + locationUrl, headMap);
+        String body = HttpUtil.getBody(getRequestUrl() + locationUrl, headMap);
 
         if (body.contains("由于作者隐私设置，你没有权限查看此微博")) {
             throw new BasicException(500, "由于作者隐私设置，不可以通过分享查看。(待后续通过其他方法拿到，暂时没时间研究)");
@@ -101,8 +100,13 @@ public class WeiBoParseHandler implements Parse {
     }
 
     @Override
+    public String getRequestUrl() {
+        return "https://m.weibo.cn";
+    }
+
+    @Override
     public Map<String, String> getHeaderMap() {
-        return null;
+        return super.getHeaderMap();
     }
 
     private String getData(String body) {

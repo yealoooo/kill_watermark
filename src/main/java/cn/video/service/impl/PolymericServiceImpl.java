@@ -1,31 +1,34 @@
 package cn.video.service.impl;
 
 import cn.hutool.http.HttpRequest;
+import cn.video.controller.vo.ParseVO;
 import cn.video.exceptions.BasicException;
 import cn.video.parse.Parse;
 import cn.video.parse.ParseContext;
-import cn.video.parse.handler.DouYinParseHandler;
 import cn.video.service.PolymericService;
 import cn.video.util.HttpRequestHeaderUtil;
-import cn.video.vo.ParseVO;
+import cn.video.util.UrlUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 
 @Service
 public class PolymericServiceImpl implements PolymericService {
 
     @Override
     public ParseVO parseUrl(String url) {
-        Parse parser = ParseContext.getParser(url);
+        String domain = UrlUtil.getDomain(url);
+        if (!StringUtils.hasLength(domain)) {
+            throw new BasicException(500, "解析失败");
+        }
+
+        domain = domain.replace("https://", "").replace("http://", "");
+        Parse parser = ParseContext.getParser(domain);
+
         if (null == parser) throw new BasicException(500, "解析失败");
         try {
             return parser.parseUrl(url);
@@ -44,11 +47,6 @@ public class PolymericServiceImpl implements PolymericService {
     @Override
     public void downLoadImage(String url, HttpServletResponse response) {
         download(url, response);
-    }
-
-    @Override
-    public void fankui(String fk) {
-        System.out.println("反馈内容:" + fk);
     }
 
     private void download(String url, HttpServletResponse response) {

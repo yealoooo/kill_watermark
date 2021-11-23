@@ -1,4 +1,4 @@
-package cn.video.vo;
+package cn.video.controller.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
