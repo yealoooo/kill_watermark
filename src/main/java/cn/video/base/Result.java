@@ -32,6 +32,12 @@ public class Result {
         return new Result(200, "success", AESUtil.encryptAES(data));
     }
 
+
+    public static Result aes(String aesData) {
+
+        return new Result(200, "success", aesData);
+    }
+
     public static Result error(int code, String msg) {
         return new Result(code, msg, null);
     }

@@ -61,7 +61,7 @@ public class XiaoHongShuParseHandler implements Parse {
     public Map<String, String> getHeaderMap() {
         return new HashMap<String, String>(){{
             put("authorization", "wxmp.36f11a45-51c8-402a-910d-0cdad75eafda");
-            put("device-fingerprint", "WHJMrwNw1k/GZQYJgbVP1Int3Fky81ey44AF34mZOUHcsAVFqScxl595rnisZ+35k35qp9B6ZumLJYUtqXNVQIjlh2oWHn6cLdCW1tldyDzmauSxIJm5Txg==1487582755342");
+            put("device-fingerprint", "WHJMrwNw1k/GJYr0qPYYVhcCIN4Nh6/xnGHyt6x/1UawvmXCTgqKCibzHKDHJxwu/NA0VANd0a9hewikEQJs3PLhDKOI28G01dCW1tldyDzmauSxIJm5Txg==1487582755342");
             put("content-type", "application/json");
             put("referer", "https://servicewechat.com/wxb296433268a1c654/46/page-frame.html");
             put("user-agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36 MicroMessenger/7.0.9.501 NetType/WIFI MiniProgramEnv/Windows WindowsWechat");

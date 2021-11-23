@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets;
 
 public class AESUtil {
 
-    private static final String KEY = "";
+    private static final String KEY = "1997955904286666";
 //
 //    public static void main(String[] args) {
 //        String content = "你好啊哈哈哈哈";
