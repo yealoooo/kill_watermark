@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="APP_NAME" value="LogExample"/>
+
+    <property name="DEV_PATH" value="./logs"/>
+
+
+    <property name="PROD_PATH" value="./logs"/>
+
+    <!--    测试环境控制台输出-->
+    <springProfile name="dev">
+<!--        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">-->
+<!--            <encoder>-->
+<!--                <pattern>%-12(%d{yyyy-MM-dd HH:mm:ss.SSS}) |-%-5level [%thread] %c %method [%L] -| %msg%n</pattern>-->
+<!--            </encoder>-->
+<!--        </appender>-->
+        <include resource="org/springframework/boot/logging/logback/base.xml" />
+        <logger name="org.springframework.web" level="INFO"/>
+        <logger name="org.springboot.sample" level="INFO" />
+        <logger name="cn.video" level="debug"/>
+        <root level="info">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+
+    <springProfile name="dev">
+        <appender name="DEV_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <!--指定日志文件名称-->
+            <file>${DEV_PATH}${file.separator}${APP_NAME}.log</file>
+            <encoder>
+                <pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}] %X{logthreadId} [%thread] %-5level %logger{80} %method %line - %msg%n
+                </pattern>
+                <charset>utf8</charset>
+            </encoder>
+            <Prudent>true</Prudent>
+            <rollingPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>
+                    ${DEV_PATH}${file.separator}%d{yyyy-MM-dd}${file.separator}${APP_NAME}-%d{yyyy-MM-dd}.%i.log
+                </fileNamePattern>
+                <!--日志最大保存15天-->
+                <maxHistory>15</maxHistory>
+                <!--日志最大的文件大小-->
+                <maxFileSize>30MB</maxFileSize>
+                <!--日志最大保存10GB-->
+                <!--            <totalSizeCap>1MB</totalSizeCap>-->
+            </rollingPolicy>
+        </appender>
+
+
+        <root level="INFO">
+            <appender-ref ref="DEV_FILE"/>
+        </root>
+    </springProfile>
+
+
+    <springProfile name="prod">
+        <appender name="PROD_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <!--指定日志文件名称-->
+            <file>${PROD_PATH}${file.separator}${APP_NAME}.log</file>
+            <encoder>
+                <pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}] %X{logthreadId} [%thread] %-5level %logger{80} %method %line - %msg%n
+                </pattern>
+                <charset>utf8</charset>
+            </encoder>
+            <Prudent>true</Prudent>
+            <rollingPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>
+                    ${PROD_PATH}${file.separator}%d{yyyy-MM-dd}${file.separator}${APP_NAME}-%d{yyyy-MM-dd}.%i.log
+                </fileNamePattern>
+                <!--日志最大保存15天-->
+                <maxHistory>180</maxHistory>
+                <!--日志最大的文件大小-->
+                <maxFileSize>30MB</maxFileSize>
+                <!--日志最大保存10GB-->
+                <!--            <totalSizeCap>1MB</totalSizeCap>-->
+            </rollingPolicy>
+        </appender>
+
+
+        <root level="INFO">
+            <appender-ref ref="PROD_FILE"/>
+        </root>
+    </springProfile>
+</configuration>

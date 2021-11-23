@@ -55,6 +55,7 @@ public class PolymericController {
     }
 
     @GetMapping("/getTitleText")
+    @ApiEncryptAnnotation
     public Result<String> getTitleText() {
         String titleText = "将复制好的连接粘贴至下方点击解析即可!\n" +
                 "目前支持(抖音,皮皮虾,小红书,微博)\n" +
