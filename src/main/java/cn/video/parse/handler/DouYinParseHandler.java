@@ -55,9 +55,4 @@ public class DouYinParseHandler extends Parse {
     public Map<String, String> getHeaderMap() {
         return super.getHeaderMap();
     }
-
-    public static void main(String[] args) throws IOException {
-        DouYinParseHandler douYinParseHandler = new DouYinParseHandler();
-        douYinParseHandler.parseUrl("https://v.douyin.com/eEcPdeo/");
-    }
 }

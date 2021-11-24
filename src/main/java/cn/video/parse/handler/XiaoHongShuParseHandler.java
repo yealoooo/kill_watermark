@@ -1,10 +1,14 @@
 package cn.video.parse.handler;
 
 import cn.video.controller.vo.ParseVO;
+import cn.video.exceptions.BasicException;
 import cn.video.parse.Parse;
 import cn.video.util.HttpUtil;
+import cn.video.util.ReplaceIpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 
@@ -15,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class XiaoHongShuParseHandler extends Parse {
+    private static final Logger log = LoggerFactory.getLogger(XiaoHongShuParseHandler.class);
 
     @Override
     public ParseVO parseUrl(String url) {
@@ -30,11 +35,28 @@ public class XiaoHongShuParseHandler extends Parse {
         headMap.put("x-sign", getXSign(requestUrl));
         headMap.putAll(getHeaderMap());
 
-        String body = HttpUtil.getBody(requestUrl, headMap);
+        JSONObject jsonObject = null;
+        boolean requestWhileFlag = true;
+        while (requestWhileFlag) {
+            String body = HttpUtil.getBody(requestUrl, headMap);
 
-        System.out.println("小红书解析:" + body);
+            log.info("解析结果: {}", body);
 
-        JSONObject jsonObject = JSON.parseObject(body);
+            jsonObject = JSON.parseObject(body);
+
+            Integer code = jsonObject.getInteger("code");
+            if (code.equals(-1)) {
+                String msg = jsonObject.getString("msg");
+
+                // 更换ip重新加载
+                if (msg.equals("Spam")) {
+                    log.info("重置ip加载");
+                    ReplaceIpUtil.replaceProxyIp();
+                }
+            } else {
+                requestWhileFlag = false;
+            }
+        }
 
         List<String> imageUrlList = jsonObject.getJSONObject("data").getJSONArray("imageList").stream().map(x -> {
             JSONObject imgObj = (JSONObject) x;

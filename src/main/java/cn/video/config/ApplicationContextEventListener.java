@@ -22,7 +22,6 @@ public class ApplicationContextEventListener implements ApplicationListener<Appl
     public void onApplicationEvent(ApplicationContextEvent event) {
         List<HandlerCategoryEntity> handlerCategoryEntityList = handlerCategoryMapper.selectList(null);
 
-        Singleton.get(ApplicationContextEventListener.class);
         for (HandlerCategoryEntity handlerCategory : handlerCategoryEntityList) {
             ParseHandlerCache.setParseHandler(handlerCategory.getDomain(), handlerCategory.getHandlerBeanName());
         }
