@@ -1,6 +1,5 @@
 package cn.video.config;
 
-import cn.hutool.core.lang.Singleton;
 import cn.video.base.ParseHandlerCache;
 import cn.video.entity.HandlerCategoryEntity;
 import cn.video.mapper.HandlerCategoryMapper;

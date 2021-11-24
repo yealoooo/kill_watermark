@@ -1,7 +1,6 @@
 package cn.video.parse.handler;
 
 import cn.video.controller.vo.ParseVO;
-import cn.video.exceptions.BasicException;
 import cn.video.parse.Parse;
 import cn.video.util.HttpUtil;
 import cn.video.util.ReplaceIpUtil;
