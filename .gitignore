@@ -20,6 +20,7 @@ target/
 *.ipr
 .mvn
 mvnw*
+*.yml
 
 .mvn/
 *.jar
@@ -36,5 +37,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-application.yml
