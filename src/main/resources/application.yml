@@ -23,9 +23,8 @@ pagehelper:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://150.158.25.115:3306/water_marker?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=Asia/Shanghai
-    username: root
-    password: 1qazXSW@
+    url:
+    password:
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       maximum-pool-size: 12 #最大连接数，小于等于0会被重置为默认值10；大于零小于1会被重置为minimum-idle的值
