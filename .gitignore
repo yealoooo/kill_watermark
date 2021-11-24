@@ -21,8 +21,6 @@ target/
 .mvn
 mvnw*
 
-/src/main/resources/application.yml
-
 .mvn/
 *.jar
 
@@ -38,3 +36,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+/src/main/resources/application.yml
+logs
