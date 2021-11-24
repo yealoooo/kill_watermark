@@ -1,28 +1,28 @@
 package cn.video.config;
 
+import cn.hutool.core.lang.Singleton;
 import cn.video.base.ParseHandlerCache;
 import cn.video.entity.HandlerCategoryEntity;
 import cn.video.mapper.HandlerCategoryMapper;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ApplicationContextEvent;
+import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
-@Configuration
-@DependsOn("applicationContextUtils")
-public class LoadParseHandlerOnPostConstruct {
-
+@Component
+public class ApplicationContextEventListener implements ApplicationListener<ApplicationContextEvent> {
     private final HandlerCategoryMapper handlerCategoryMapper;
 
-    public LoadParseHandlerOnPostConstruct(HandlerCategoryMapper handlerCategoryMapper) {
+    public ApplicationContextEventListener(HandlerCategoryMapper handlerCategoryMapper) {
         this.handlerCategoryMapper = handlerCategoryMapper;
     }
 
-    @PostConstruct
-    public void loadParseHandler() {
+    @Override
+    public void onApplicationEvent(ApplicationContextEvent event) {
         List<HandlerCategoryEntity> handlerCategoryEntityList = handlerCategoryMapper.selectList(null);
 
+        Singleton.get(ApplicationContextEventListener.class);
         for (HandlerCategoryEntity handlerCategory : handlerCategoryEntityList) {
             ParseHandlerCache.setParseHandler(handlerCategory.getDomain(), handlerCategory.getHandlerBeanName());
         }
