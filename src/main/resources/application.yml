@@ -23,7 +23,7 @@ pagehelper:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url:
+    url: 234234
     password:
     type: com.zaxxer.hikari.HikariDataSource
     hikari:

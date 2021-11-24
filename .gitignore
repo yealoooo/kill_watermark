@@ -20,7 +20,8 @@ target/
 *.ipr
 .mvn
 mvnw*
-*.yml
+
+/src/main/resources/application.yml
 
 .mvn/
 *.jar
