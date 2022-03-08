@@ -1,6 +1,7 @@
 package cn.video.util;
 
 
+import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
@@ -9,6 +10,7 @@ import cn.video.mapper.ProxyIpMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.Map;
@@ -33,17 +35,22 @@ public class HttpUtil {
         }
 
 
-        if (proxyFlag) {
-            ProxyIpMapper proxyIpMapper = ApplicationContextUtils.getBean(ProxyIpMapper.class);
-            ProxyIpEntity proxyIpEntity = proxyIpMapper.selectById(1);
-            if (null != proxyIpEntity) {
-                Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyIpEntity.getIp(), proxyIpEntity.getPort()));
-                httpRequest.setProxy(proxy);
+        while (true) {
+            try {
+                if (proxyFlag) {
+                    ProxyIpMapper proxyIpMapper = ApplicationContextUtils.getBean(ProxyIpMapper.class);
+                    ProxyIpEntity proxyIpEntity = proxyIpMapper.selectById(1);
+                    if (null != proxyIpEntity) {
+                        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyIpEntity.getIp(), proxyIpEntity.getPort()));
+                        httpRequest.setProxy(proxy);
+                    }
+                }
+                return httpRequest.execute();
+            } catch (IORuntimeException ex) {
+                ex.printStackTrace();
+                ReplaceIpUtil.replaceProxyIp();
             }
         }
-
-
-        return httpRequest.execute();
     }
 
 
