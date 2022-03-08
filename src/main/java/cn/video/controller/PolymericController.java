@@ -29,7 +29,7 @@ public class PolymericController {
 
     @GetMapping("/parseUrl")
     @ApiEncryptAnnotation
-    public Result<ParseVO> parseUrl(@RequestParam String url) throws IOException {
+    public Result<ParseVO> parseUrl(@RequestParam String url) {
         return Result.success(this.polymericService.parseUrl(UrlUtil.filterUrl(url)));
     }
 
@@ -57,10 +57,7 @@ public class PolymericController {
     @GetMapping("/getTitleText")
     @ApiEncryptAnnotation
     public Result<String> getTitleText() {
-        String titleText = "将复制好的连接粘贴至下方点击解析即可!\n" +
-                "目前支持(抖音,皮皮虾,小红书,微博)\n" +
-                "注:(小红书暂且仅支持 图片解析)\n" +
-                "(皮皮虾暂且支持视频解析)";
+        String titleText = "支持各平台视频解析!!";
 
         return Result.success(titleText);
     }

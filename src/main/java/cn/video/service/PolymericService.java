@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public interface PolymericService {
 
-    ParseVO parseUrl(String url) throws IOException;
+    ParseVO parseUrl(String url);
 
     void downLoadVideo(String url, HttpServletResponse response);
 

@@ -19,6 +19,7 @@ public class HttpUtil {
 
     private static HttpResponse get(String url, Map<String, String> headerMap, boolean proxyFlag) {
         HttpRequest httpRequest = HttpRequest.get(url);
+        httpRequest.timeout(100000);
 
         if (null != headerMap && !headerMap.isEmpty()) {
             for (String header : headerMap.keySet()) {
@@ -47,7 +48,7 @@ public class HttpUtil {
 
 
     public static String getBody(String url, Map<String, String> header) {
-        return get(url, header, true).body();
+        return get(url, header, false).body();
     }
 
     public static String getLocationUrl(String url, Map<String, String> header) {

@@ -14,7 +14,7 @@ import java.util.Map;
 
 public abstract class Parse {
 
-    public abstract ParseVO parseUrl(String url) throws IOException;
+    public abstract ParseVO parseUrl(String url) throws Exception;
 
     public abstract String getItemId(String url);
 

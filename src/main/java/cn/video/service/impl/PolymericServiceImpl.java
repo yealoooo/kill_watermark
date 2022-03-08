@@ -3,13 +3,11 @@ package cn.video.service.impl;
 import cn.hutool.http.HttpRequest;
 import cn.video.controller.vo.ParseVO;
 import cn.video.exceptions.BasicException;
-import cn.video.parse.Parse;
-import cn.video.parse.ParseContext;
+import cn.video.parse.handler.third.ThirdHandler;
 import cn.video.service.PolymericService;
 import cn.video.util.HttpRequestHeaderUtil;
-import cn.video.util.UrlUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -19,20 +17,26 @@ import java.io.InputStream;
 @Service
 public class PolymericServiceImpl implements PolymericService {
 
+    @Autowired
+    private ThirdHandler thirdHandler;
+
     @Override
     public ParseVO parseUrl(String url) {
-        String domain = UrlUtil.getDomain(url);
-        if (!StringUtils.hasLength(domain)) {
-            throw new BasicException(500, "解析失败");
-        }
-
-        domain = domain.replace("https://", "").replace("http://", "");
-        Parse parser = ParseContext.getParser(domain);
-
-        if (null == parser) throw new BasicException(500, "解析失败");
+//        String domain = UrlUtil.getDomain(url);
+//        if (!StringUtils.hasLength(domain)) {
+//            throw new BasicException(500, "解析失败");
+//        }
+//
+//        domain = domain.replace("https://", "").replace("http://", "");
+//        Parse parser = ParseContext.getParser(domain);
         try {
-            return parser.parseUrl(url);
-        } catch (IOException e) {
+            ParseVO parser = thirdHandler.parseUrl(url);
+
+            if (null == parser) throw new BasicException(500, "解析失败");
+
+            return parser;
+        } catch (Exception e) {
+            e.printStackTrace();
             throw new BasicException(500, "解析失败");
         }
     }
